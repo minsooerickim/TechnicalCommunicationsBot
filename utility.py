@@ -22,6 +22,7 @@ def check_num_sentences_in_paragraph(essay: str) -> bool:
         True if no paragraphs exceed 5 sentences.
         False if more than 5 sentences per paragraph is detected.
     """
+    error_detected = False
     last_sentence_index = -1
     num_sentences = 0
     N = len(essay)
@@ -32,19 +33,21 @@ def check_num_sentences_in_paragraph(essay: str) -> bool:
             last_sentence_index = i
         if char == '\n': 
             if num_sentences > 5:
-                print(f'{bcolors.FAIL}{num_sentences} sentences detected!\n')
-                print(f'{bcolors.FAIL}sentence limit of 5 per paragraph exceeded!\n')
+                error_detected = True
+                print('\n')
+                print(f'\n {bcolors.FAIL}{num_sentences} sentences detected!\n')
+                print(f'{bcolors.WARNING}sentence limit of 5 per paragraph exceeded!\n')
                 print(f'... {essay[last_sentence_index:i]} ...')
-                return False
             num_sentences = 0
     
     if num_sentences > 5:
-        print(f'{bcolors.FAIL}{num_sentences} sentences detected!\n')
-        print(f'{bcolors.FAIL}sentence limit of 5 per paragraph exceeded!\n')
+        print('\n')
+        print(f'\n {bcolors.FAIL}{num_sentences} sentences detected!\n')
+        print(f'{bcolors.WARNING}sentence limit of 5 per paragraph exceeded!\n')
         print(f'... {essay[last_sentence_index:i]} ...')
         return False
 
-    return True
+    return not error_detected
 
 def check_past_tense(essay: str) -> bool:
     """
@@ -53,13 +56,16 @@ def check_past_tense(essay: str) -> bool:
         True if no past tense detected.
         False if any past tense detected.
     """
+    error_detected = False
     words = essay.split(' ')
     for word in words:
         if word.endswith('ed'):
-            print(f'{bcolors.FAIL}past tense word detected!')
-            print(f'{bcolors.FAIL}\n{word}\n')
-            return False
-    return True
+            error_detected = True
+            print('\n')
+            print(f'\n {bcolors.FAIL}past tense word detected!')
+            print(f'{bcolors.WARNING}\n{word}\n')
+
+    return not error_detected
 
 def word_count_per_sentence(essay: str) -> bool:
     """
@@ -70,11 +76,14 @@ def word_count_per_sentence(essay: str) -> bool:
         True if check passed.
         False if check fails.
     """
+    error_detected = False
     split_by_period = essay.split('.')
     for split in split_by_period:
         split_by_space = split.split(' ')
         if len(split_by_space) > 25:
-            print(f'{bcolors.FAIL}{len(split_by_space)} words detected in a single sentece!\n')
-            print(f'... {split} ...')
-            return False
-    return True
+            error_detected = True
+            print('\n')
+            print(f'\n {bcolors.FAIL}{len(split_by_space)} words detected in a single sentece!\n')
+            print(f'{bcolors.WARNING}... {split} ...')
+            
+    return not error_detected

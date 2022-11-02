@@ -1,15 +1,17 @@
 """Driver file for the bot"""
+from distutils.log import error
 from utility import *
 
 def parse(essay: str) -> None:
     """
     :param essay: string to check rules against.
     """
-    if not check_num_sentences_in_paragraph(essay): return False
-    if not check_past_tense(essay): return False
-    if not word_count_per_sentence(essay): return False
+    error_detected = False
+    if not check_num_sentences_in_paragraph(essay): error_detected = True
+    if not check_past_tense(essay): error_detected = True
+    if not word_count_per_sentence(essay): error_detected = True
     
-    return True
+    return not error_detected
 
 def main():
     print("Enter/Paste your content. Ctrl-D or Ctrl-Z ( windows ) to start parsing.")
@@ -21,12 +23,13 @@ def main():
             break
         paragraphs.append(paragraph)
 
+    error_detected = False  
     N = len(paragraphs)
     for i in range(N):
-        if not parse(paragraphs[i]):
-            return 
-
-    print(f'{bcolors.OKGREEN}All checks passed!')
+        if not parse(paragraphs[i]): error_detected = True
+    
+    if not error_detected:
+        print(f'{bcolors.OKGREEN}All checks have passed!')
 
 if __name__ == "__main__":
     main()
