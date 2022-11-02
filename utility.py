@@ -23,28 +23,28 @@ def check_num_sentences_in_paragraph(essay: str) -> bool:
         False if more than 5 sentences per paragraph is detected.
     """
     error_detected = False
-    last_sentence_index = -1
+    last_paragraph_index = 0
     num_sentences = 0
     N = len(essay)
     for i in range(N):
         char = essay[i]
         if char == '.': 
             num_sentences += 1
-            last_sentence_index = i
         if char == '\n': 
             if num_sentences > 5:
                 error_detected = True
                 print('\n')
-                print(f'\n {bcolors.FAIL}{num_sentences} sentences detected!\n')
+                print(f'\n {bcolors.FAIL}{num_sentences} sentences detected in 1 paragraph!\n')
                 print(f'{bcolors.WARNING}sentence limit of 5 per paragraph exceeded!\n')
-                print(f'... {essay[last_sentence_index:i]} ...')
+                print(f'... {essay[last_paragraph_index:i]} ...')
+            last_paragraph_index = i+1
             num_sentences = 0
     
     if num_sentences > 5:
         print('\n')
         print(f'\n {bcolors.FAIL}{num_sentences} sentences detected!\n')
         print(f'{bcolors.WARNING}sentence limit of 5 per paragraph exceeded!\n')
-        print(f'... {essay[last_sentence_index:i]} ...')
+        print(f'... {essay[last_paragraph_index:i]} ...')
         return False
 
     return not error_detected
@@ -85,5 +85,5 @@ def word_count_per_sentence(essay: str) -> bool:
             print('\n')
             print(f'\n {bcolors.FAIL}{len(split_by_space)} words detected in a single sentece!\n')
             print(f'{bcolors.WARNING}... {split} ...')
-            
+
     return not error_detected

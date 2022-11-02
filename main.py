@@ -29,7 +29,9 @@ def main():
         if not parse(paragraphs[i]): error_detected = True
     
     if not error_detected:
+        print('\n')
         print(f'{bcolors.OKGREEN}All checks have passed!')
+    print('\n')
 
 if __name__ == "__main__":
     main()
