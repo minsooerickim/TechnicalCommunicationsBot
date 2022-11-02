@@ -34,14 +34,14 @@ def check_num_sentences_in_paragraph(essay: str) -> bool:
             if num_sentences > 5:
                 print(f'{bcolors.FAIL}{num_sentences} sentences detected!\n')
                 print(f'{bcolors.FAIL}sentence limit of 5 per paragraph exceeded!\n')
-                print(f'... {essay[last_sentence_index:i+1]} ...')
+                print(f'... {essay[last_sentence_index:i]} ...')
                 return False
             num_sentences = 0
     
     if num_sentences > 5:
         print(f'{bcolors.FAIL}{num_sentences} sentences detected!\n')
         print(f'{bcolors.FAIL}sentence limit of 5 per paragraph exceeded!\n')
-        print(f'... {essay[last_sentence_index:i+1]} ...')
+        print(f'... {essay[last_sentence_index:i]} ...')
         return False
 
     return True
@@ -58,5 +58,23 @@ def check_past_tense(essay: str) -> bool:
         if word.endswith('ed'):
             print(f'{bcolors.FAIL}past tense word detected!')
             print(f'{bcolors.FAIL}\n{word}\n')
+            return False
+    return True
+
+def word_count_per_sentence(essay: str) -> bool:
+    """
+    Each sentence cannot exceed 25 words.
+
+    :param essay: essay to check the word counts for.
+    :returns: 
+        True if check passed.
+        False if check fails.
+    """
+    split_by_period = essay.split('.')
+    for split in split_by_period:
+        split_by_space = split.split(' ')
+        if len(split_by_space) > 25:
+            print(f'{bcolors.FAIL}{len(split_by_space)} words detected in a single sentece!\n')
+            print(f'... {split} ...')
             return False
     return True

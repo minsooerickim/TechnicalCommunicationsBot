@@ -7,6 +7,7 @@ def parse(essay: str) -> None:
     """
     if not check_num_sentences_in_paragraph(essay): return False
     if not check_past_tense(essay): return False
+    if not word_count_per_sentence(essay): return False
     
     return True
 
