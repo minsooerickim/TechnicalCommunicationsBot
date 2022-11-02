@@ -15,10 +15,9 @@ class bcolors:
         self.ENDC = ''
 
 
-def check_num_sentences_in_paragraph(essay: str, paragraph_count: int) -> bool:
+def check_num_sentences_in_paragraph(essay: str) -> bool:
     """
     :param essay: check each paragraph doesn't exceed 5 sentences.
-    :param paragraph_count: paragraph number.
     :returns: 
         True if no paragraphs exceed 5 sentences.
         False if more than 5 sentences per paragraph is detected.
@@ -28,21 +27,28 @@ def check_num_sentences_in_paragraph(essay: str, paragraph_count: int) -> bool:
     N = len(essay)
     for i in range(N):
         char = essay[i]
-        if char == '.' and num_sentences == 5:
-            print(f'{bcolors.FAIL}\nin paragraph {paragraph_count}')
-            print(f'{bcolors.FAIL}sentence limit of 5 per paragraph exceeded!\n')
-            print(f'... {essay[last_sentence_index:i+1]} ...')
-            return False
         if char == '.': 
             num_sentences += 1
             last_sentence_index = i
-        if char == '\n': num_sentences = 0
+        if char == '\n': 
+            if num_sentences > 5:
+                print(f'{bcolors.FAIL}{num_sentences} sentences detected!\n')
+                print(f'{bcolors.FAIL}sentence limit of 5 per paragraph exceeded!\n')
+                print(f'... {essay[last_sentence_index:i+1]} ...')
+                return False
+            num_sentences = 0
+    
+    if num_sentences > 5:
+        print(f'{bcolors.FAIL}{num_sentences} sentences detected!\n')
+        print(f'{bcolors.FAIL}sentence limit of 5 per paragraph exceeded!\n')
+        print(f'... {essay[last_sentence_index:i+1]} ...')
+        return False
+
     return True
 
-def check_past_tense(essay: str, paragraph_count: int) -> bool:
+def check_past_tense(essay: str) -> bool:
     """
     :param essay: essay to check past tense for.
-    :param paragraph_count: paragraph number.
     :returns: 
         True if no past tense detected.
         False if any past tense detected.
@@ -50,7 +56,6 @@ def check_past_tense(essay: str, paragraph_count: int) -> bool:
     words = essay.split(' ')
     for word in words:
         if word.endswith('ed'):
-            print(f'{bcolors.FAIL}\nin paragraph {paragraph_count}')
             print(f'{bcolors.FAIL}past tense word detected!')
             print(f'{bcolors.FAIL}\n{word}\n')
             return False

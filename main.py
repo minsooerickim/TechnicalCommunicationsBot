@@ -1,13 +1,12 @@
 """Driver file for the bot"""
 from utility import *
 
-def parse(essay: str, paragraph_count: int) -> None:
+def parse(essay: str) -> None:
     """
     :param essay: string to check rules against.
-    :param paragraph_count: paragraph number.
     """
-    if not check_num_sentences_in_paragraph(essay, paragraph_count): return False
-    if not check_past_tense(essay, paragraph_count): return False
+    if not check_num_sentences_in_paragraph(essay): return False
+    if not check_past_tense(essay): return False
     
     return True
 
@@ -23,7 +22,7 @@ def main():
 
     N = len(paragraphs)
     for i in range(N):
-        if not parse(paragraphs[i], i):
+        if not parse(paragraphs[i]):
             return 
 
     print(f'{bcolors.OKGREEN}All checks passed!')
